@@ -115,15 +115,45 @@ app.get("/kv-test", async (c) => {
 // Main route
 app.get("/", (c) =>
   c.html(`
-  <h1>BiblioReads Checker</h1>
-  <ul>
-    <li><a href="/instances">Raw Instance List</a></li>
-    <li><a href="/all">All Instances</a></li>
-    <li><a href="/up">Up Instances</a></li>
-    <li><a href="/down">Down Instances</a></li>
-    <li><a href="/random">Random Up Instance</a></li>
-    <li><a href="/api-check">API Health Check</a></li>
-  </ul>
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>BiblioReads Monitor</title>
+      <style>
+        body {
+          font-family: sans-serif;
+          margin: 2rem;
+          line-height: 1.6;
+        }
+        h1 {
+          margin-bottom: 1rem;
+        }
+        ul {
+          padding-left: 1rem;
+        }
+        a {
+          color: #0066cc;
+          text-decoration: none;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
+      </style>
+    </head>
+    <body>
+      <h1>BiblioReads Monitor</h1>
+      <ul>
+        <li><a href="/instances">Raw Instance List</a></li>
+        <li><a href="/all">All Instances</a></li>
+        <li><a href="/up">Up Instances</a></li>
+        <li><a href="/down">Down Instances</a></li>
+        <li><a href="/random">Random Up Instance</a></li>
+        <li><a href="/api-check">API Health Check</a></li>
+      </ul>
+    </body>
+  </html>
 `)
 );
 
