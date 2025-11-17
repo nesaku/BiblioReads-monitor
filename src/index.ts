@@ -122,6 +122,142 @@ app.get("/", (c) =>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>BiblioReads Monitor</title>
       <style>
+        body { font-family: sans-serif; margin: 2rem; background: #f9fafb; }
+        h1 { margin-bottom: 1rem; }
+        nav { margin-bottom: 1rem; }
+        nav a { margin-right: 1rem; color: #007acc; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        #output { margin-top: 1rem; }
+        table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+        th, td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+        th { background: #f0f0f0;  text-transform: capitalize; }
+        .status-up { color: green; font-weight: bold; }
+        .status-down { color: red; font-weight: bold; }
+        .loading { font-style: italic; color: #555; }
+      </style>
+    </head>
+    <body>
+      <h1>BiblioReads Monitor</h1>
+      <nav>
+        <a href="#" onclick="loadData('/instances')">Raw List</a>
+        <a href="#" onclick="loadData('/all')">All</a>
+        <a href="#" onclick="loadData('/up')">Up</a>
+        <a href="#" onclick="loadData('/down')">Down</a>
+        <a href="#" onclick="loadRandom()">Random</a>
+        <a href="#" onclick="loadApiCheck()">API Check</a>
+      </nav>
+      <div id="output">Select an endpoint above.</div>
+
+      <script>
+        async function loadData(endpoint) {
+          document.getElementById('output').innerHTML = '<div class="loading">Loading...</div>';
+          try {
+            const res = await fetch(endpoint);
+            const data = await res.json();
+            renderInstances(data);
+          } catch (err) {
+            document.getElementById('output').innerHTML = '<div style="color:red">Error loading data</div>';
+          }
+        }
+
+        function renderInstances(data) {
+          if (!Array.isArray(data)) {
+            document.getElementById('output').innerHTML =
+              '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            return;
+          }
+          let html = '<table><thead><tr>';
+          const keys = Object.keys(data[0] || {});
+          keys.forEach(k => html += '<th>' + k + '</th>');
+          html += '</tr></thead><tbody>';
+          data.forEach(row => {
+            html += '<tr>';
+            keys.forEach(k => {
+              let val = row[k];
+              if (val === undefined) { html += '<td></td>'; return; }
+              if (k.toLowerCase().includes('url') || k.toLowerCase().includes('instance')) {
+                val = '<a href="' + row[k] + '" target="_blank">' + row[k] + '</a>';
+              }
+              if (k.toLowerCase().includes('status')) {
+                const cls = val === 'up' ? 'status-up' : 'status-down';
+                val = '<span class="' + cls + '">' + val + '</span>';
+              }
+              html += '<td>' + val + '</td>';
+            });
+            html += '</tr>';
+          });
+          html += '</tbody></table>';
+          document.getElementById('output').innerHTML = html;
+        }
+
+        async function loadRandom() {
+          document.getElementById('output').innerHTML = '<div class="loading">Loading random instance...</div>';
+          try {
+            const res = await fetch('/random');
+            const data = await res.json();
+            if (data.url) {
+              document.getElementById('output').innerHTML =
+                '<p>Random instance: <a href="' + data.url + '" target="_blank">' + data.url + '</a></p>';
+            } else {
+              document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            }
+          } catch (err) {
+            document.getElementById('output').innerHTML = '<div style="color:red">Error loading random instance</div>';
+          }
+        }
+
+        async function loadApiCheck() {
+          document.getElementById('output').innerHTML = '<div class="loading">Running API health check...</div>';
+          try {
+            const res = await fetch('/api-check');
+            const data = await res.json();
+            renderApiCheck(data);
+          } catch (err) {
+            document.getElementById('output').innerHTML = '<div style="color:red">Error running API check</div>';
+          }
+        }
+
+        function renderApiCheck(data) {
+          if (!data.results) {
+            document.getElementById('output').innerHTML =
+              '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            return;
+          }
+          let html = '<h2>API Health Check Results</h2><table><thead><tr><th>Endpoint</th><th>Status</th><th>Passed</th></tr></thead><tbody>';
+          data.results.forEach(item => {
+            const statusClass = item.passed ? 'status-up' : 'status-down';
+            html += '<tr>';
+            html += '<td><a href="' + item.url + '" target="_blank">' + item.url + '</a></td>';
+            html += '<td>' + item.status + '</td>';
+            html += '<td><span class="' + statusClass + '">' + (item.passed ? '✔' : '✖') + '</span></td>';
+            html += '</tr>';
+          });
+          html += '</tbody></table>';
+          if (data.failures && data.failures.length > 0) {
+            html += '<h3>Failures</h3><ul>';
+            data.failures.forEach(f => {
+              html += '<li><a href="' + f.url + '" target="_blank">' + f.url + '</a></li>';
+            });
+            html += '</ul>';
+          }
+          document.getElementById('output').innerHTML = html;
+        }
+      </script>
+    </body>
+  </html>
+`)
+);
+
+// API Routes
+app.get("/routes", (c) =>
+  c.html(`
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>BiblioReads Monitor Routes</title>
+      <style>
         body {
           font-family: sans-serif;
           margin: 2rem;
