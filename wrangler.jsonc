@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "biblioreads-monitor",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-11-17",
+
+  "kv_namespaces": [
+    {
+      "binding": "BIBLIOREADS_KV",
+      "id": "3853f15239f34ae9a65609d934134f51"
+    }
+  ]
+
+  // Vars are NOT defined here, they are located in `.dev.vars` for local development,
+  // These should be set in production using `wrangler secret put`.
+}
