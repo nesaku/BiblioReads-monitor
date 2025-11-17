@@ -1,8 +1,8 @@
 # BiblioReads Monitor
 
-A Cloudflare Worker that monitors BiblioReads instance status, caches results in KV, and does a health check on the main instance.
+A Cloudflare Worker that monitors BiblioReads instance statuses, caches results in KV, and does a health check on the main instance.
 
-Built with [Hono](https://hono.dev/) and [Cloudflare Workers](https://developers.cloudflare.com/workers/) using Cloudflare’s generated runtime types (`wrangler types`).
+Built with [Hono](https://hono.dev/) and deployed using [Cloudflare Workers](https://developers.cloudflare.com/workers/) using Cloudflare’s generated runtime types (`wrangler types`).
 
 ---
 
@@ -18,8 +18,8 @@ Built with [Hono](https://hono.dev/) and [Cloudflare Workers](https://developers
 - `/all` for all instances with status
 - `/up` for only healthy instances
 - `/down` for failing instances
-- `/random` for random healthy instance
-- `/api-check` for runs API health checks and notifies via NTFY
+- `/random` for a random healthy instance
+- `/api-check` runs API health checks and notifies via NTFY for failures
 
 ---
 
@@ -28,6 +28,7 @@ Built with [Hono](https://hono.dev/) and [Cloudflare Workers](https://developers
 ```bash
 npm install
 ```
+
 Rename `.example.dev.vars` to `dev.vars` and edit with your env vars:
 
 ```bash
@@ -37,6 +38,7 @@ mv .example.dev.vars .dev.vars
 Update the KV namespace configuration in `wrangler.jsonc`
 
 Always run wrangler types after editing wrangler.jsonc or .dev.vars
+
 ```bash
 npx wrangler types
 ```
