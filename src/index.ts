@@ -139,7 +139,7 @@ app.get("/", (c) =>
     <body>
       <h1>BiblioReads Monitor</h1>
       <nav>
-        <a href="#" onclick="loadData('/instances')">Raw List</a>
+        <a href="#" onclick="loadData('/instances')">Full List</a>
         <a href="#" onclick="loadData('/all')">All</a>
         <a href="#" onclick="loadData('/up')">Up</a>
         <a href="#" onclick="loadData('/down')">Down</a>
@@ -242,6 +242,11 @@ app.get("/", (c) =>
           }
           document.getElementById('output').innerHTML = html;
         }
+
+        console.log(
+          "%c".concat("Built By: Nesaku | https://github.com/nesaku"),
+          "color:green"
+        );
       </script>
     </body>
   </html>

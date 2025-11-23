@@ -2,14 +2,14 @@
 
 A Cloudflare Worker that monitors BiblioReads instance statuses, caches results in KV, and does a health check on the main instance.
 
-Built with [Hono](https://hono.dev/) and deployed using [Cloudflare Workers](https://developers.cloudflare.com/workers/) using Cloudflare’s generated runtime types (`wrangler types`).
+Built with [Hono](https://hono.dev/), using Cloudflare’s generated runtime types (`wrangler types`) and deployed on [Cloudflare Workers](https://developers.cloudflare.com/workers/).
 
 ---
 
 ### Features
 
 - Fetches and caches instance list from a source URL
-- Checks instance availability with concurrency + timeout controls
+- Checks instance availability with concurrency and timeout controls
 - KV caching with stale‑while‑revalidate (serves stale data, refreshes in background)
 
 ### API Routes
