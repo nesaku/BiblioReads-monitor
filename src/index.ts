@@ -337,7 +337,7 @@ app.get("/api-check", async (c) => {
         },
         {
           path: "/api/similar-scraper",
-          body: { queryURL: "https://goodreads.com/book/similar/1540236" },
+          body: {"bookID":"kca://book/amzn1.gr.book.v1.7HhPxEJT1NiirAiej27XwA","legacyBookID":5907},
         },
         {
           path: "/api/author/info",
